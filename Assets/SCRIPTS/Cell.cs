@@ -2,17 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CellType
+{
+    None,
+    Cross,
+    Zero
+}
+
+
 public class Cell : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject cross;
+    [SerializeField] private GameObject zero;
+
+    public int Index { get; private set; }
+
+    public bool IsActive { get; set; } = true; // задается из кода
+    
+    public CellType Type { get; private set; } // умолчанию none
+
+    public void Initialize(int index)
     {
+        Index = index;
         
+        Debug.Log(Index);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SelectCross()
     {
+        if (!IsActive) return;
         
+        cross.SetActive(true);
+        zero.SetActive(false);
+        IsActive = false;
+        Type = CellType.Cross;
+    }
+    
+    public void SelectZero()
+    {
+        if (!IsActive) return;
+
+        cross.SetActive(false);
+        zero.SetActive(true);
+        IsActive = false;
+        Type = CellType.Zero;
+    }
+
+    public void Refresh()
+    {
+        cross.SetActive(false);
+        zero.SetActive(false);
+        IsActive = true;
+        Type = CellType.None;
     }
 }
