@@ -21,8 +21,6 @@ public class Cell : MonoBehaviour
     public void Initialize(int index)
     {
         Index = index;
-        
-        Debug.Log(Index);
     }
 
     public void SelectCross()

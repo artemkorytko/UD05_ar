@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class FieldSetup : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void ChangeRotation(float value)
     {
-        
+        transform.Rotate(transform.up * value);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeScale(float value)
     {
+        var scale = transform.localScale;
         
+        scale.x += value;
+        scale.y += value;
+        scale.z += value;
+
+        scale.x = Mathf.Clamp(scale.x, 0.1f, float.MaxValue);
+        scale.y = Mathf.Clamp(scale.y, 0.1f, float.MaxValue);
+        scale.z = Mathf.Clamp(scale.z, 0.1f, float.MaxValue);
+        
+        transform.localScale = scale;
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -31,12 +30,21 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         _field = Instantiate(fieldPrefab);
+        _field.Initialize();
+        _field.SetState(false);
+        _field.Refresh();
+        _field.OnCompleted += OnCompleted;
 
         _fieldPositionController = _field.GetComponent<FieldPositionController>();
         _fieldSetup = _field.GetComponent<FieldSetup>();
 
         _fieldPositionController.Initialize(arPlaneManager, arRaycastManager, arAnchorManager);
         _fieldPositionController.IsActive = true;
+    }
+
+    private void OnDestroy()
+    {
+        _field.OnCompleted -= OnCompleted;
     }
 
     public void Play()
@@ -67,7 +75,7 @@ public class GameController : MonoBehaviour
             currenEntity = _bot;
             currenEntity.OnStep += OnEntityStep;
             _isEntityMakeStep = false;
-            currenEntity.GetStep(); //TODO: get field 
+            currenEntity.GetStep(_field.FieldToArray()); //TODO: get field 
 
             yield return new WaitUntil(() => _isEntityMakeStep);
             currenEntity.OnStep -= OnEntityStep;
@@ -77,6 +85,6 @@ public class GameController : MonoBehaviour
     private void OnEntityStep(int index, CellType type)
     {
         _isEntityMakeStep = true;
-        //TODO: add field step
+        _field.SetCell(index, type);
     }
 }
